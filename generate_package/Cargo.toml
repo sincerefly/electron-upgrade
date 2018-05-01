@@ -1,0 +1,25 @@
+[package]
+name = "generater_package"
+version = "0.1.0"
+authors = ["Yieldone <yieldone@pm.me>"]
+
+[dependencies]
+rust-crypto = "^0.2"
+walkdir = "2"
+zip = "0.3"
+
+[features]
+flate2 = []
+bzip2 = []
+
+[[example]]
+name = "file_md5"
+path = "src/examples/file_md5.rs"
+
+[[example]]
+name = "zip_archive"
+path = "src/examples/zip_archive.rs"
+
+[[example]]
+name = "copy_file"
+path = "src/examples/copy_file.rs"
