@@ -2,12 +2,12 @@ extern crate walkdir;
 extern crate crypto;
 extern crate zip;
 
-
 use std::io::{Read, Write, Seek};
 use std::collections::HashMap;
 use std::path::Path;
 use std::fs::File;
 use std::fs;
+use std::time;
 
 use crypto::digest::Digest;
 use crypto::md5::Md5;
@@ -112,7 +112,7 @@ fn copy_source(sources: &Vec<(&str, String)>) {
         if p.0 == "dir" {
             let need_create = p.1.replace(latest_wrap_dirname, "__updater");
             println!("=> create dir {}", &need_create);
-            fs::create_dir_all(&need_create);
+            fs::create_dir_all(&need_create).expect("Nope");
         }
     }
     for p in sources {
@@ -121,14 +121,14 @@ fn copy_source(sources: &Vec<(&str, String)>) {
             let new_file = Path::new(&new_file);
             let new_file_path = new_file.parent().unwrap();
             println!("=> create dir: {:?}", new_file_path.display());
-            fs::create_dir_all(&new_file_path);
+            fs::create_dir_all(&new_file_path).expect("Nope");
         }
     } 
     for p in sources {
         if p.0 == "file" {
             let new_file = p.1.replace(latest_wrap_dirname, "__updater");
             println!("=> copy file: {} to {}", p.1, &new_file);
-            fs::copy(&p.1, new_file);
+            fs::copy(&p.1, new_file).expect("Nope");
         }
     } 
 }
@@ -194,33 +194,37 @@ fn doit(src_dir: &str, dst_file: &str, method: zip::CompressionMethod) -> zip::r
     Ok(())
 }
 
+fn rm_tmp_dir() {
+    fs::remove_dir_all("__updater").expect("Nope");
+}
+
 fn main() {
     
     let args: Vec<_> = std::env::args().collect();
     if args.len() < 3 {
         println!("Usage: {} <old_directory> <new_directory>",
                  args[0]);
-        return 1;
+        std::process::exit(1);
     }
 
-    let src_dir = &*args[1];
-    let dst_file = &*args[2];
+    let current_dir = &args[1];
+    let latest_dir = &args[2];
 
     let e = time::SystemTime::now();
 
-    // let path = String::from("data_current");
-    let path = String::from("win-ia32-unpacked");
-    let current_info = path_info(&path);
+    // let path = String::from("win-ia32-unpacked");
+    let current_info = path_info(&current_dir);
 
-    // let path = String::from("data_latest");
-    let path = String::from("win-ia32-unpacked_new");
-    let latest_info = path_info(&path);
+    // let path = String::from("win-ia32-unpacked_new");
+    let latest_info = path_info(&latest_dir);
 
     let sources = get_diff(&current_info, &latest_info);
 
     copy_source(&sources);
 
     pack_it();
+
+    rm_tmp_dir();
 
     let ed = time::SystemTime::now();
     println!("time spend: {:?}", ed.duration_since(e).unwrap());

@@ -38,10 +38,9 @@ fn copy_source(sources: &Vec<(&str, String)>) {
 fn collect_source<'a>() -> Vec<(&'a str, String)> {
 
     let sources = vec![
-        ("file", String::from("data_latest\\newfile.txt")),
-        ("file", String::from("data_latest\\resources\\resources.asar")),
-        ("file", String::from("data_latest\\newdir\\123.xls")),
-        ("dir", String::from("data_latest\\newdir"))
+        ("file", String::from("src\\main.rs")),
+        ("file", String::from("src\\examples\\copy_file.rs")),
+        ("dir", String::from("src\\examples"))
     ];
 
     sources
