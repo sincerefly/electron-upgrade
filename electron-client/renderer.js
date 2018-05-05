@@ -43,7 +43,8 @@ function set_mask() {
       frame: false,
       resizable: false,
       transparent: true,
-      useContentSize: true
+      useContentSize: true,
+      show: false
     });
     
     // top

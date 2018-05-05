@@ -1,16 +1,16 @@
 const electron = require('electron')
-// Module to control application life.
 const app = electron.app
-// Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 const { ipcMain } = require('electron');
 
 const path = require('path')
 const url = require('url')
 
-require('electron-reload')(__dirname, {
-  electron: path.join(__dirname, 'node_modules', '.bin', 'electron.cmd')
-});
+require('./js/ipc');
+
+// require('electron-reload')(__dirname, {
+//   electron: path.join(__dirname, 'node_modules', '.bin', 'electron.cmd')
+// });
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -22,7 +22,8 @@ function createWindow () {
     width: 640, 
     height: 480, 
     autoHideMenuBar: true,
-    frame: false
+    frame: false,
+    show: false
   })
 
   // and load the index.html of the app.
@@ -35,6 +36,10 @@ function createWindow () {
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
+
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.show();
+  });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -71,8 +76,3 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-ipcMain.on('relaunch', (_) => {
-  console.log("relaunch main");
-  app.relaunch()
-  app.exit()
-});
