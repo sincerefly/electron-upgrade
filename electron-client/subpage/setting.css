@@ -2,7 +2,7 @@
 
 body {
   background-color: white;
-  -webkit-user-select: none;
+  user-select: none;
 }
 
 .header {
@@ -14,8 +14,8 @@ body {
 .title {
   position: absolute;
   left: 20px;
-  top: 20px;
-  font-size: 28px;
+  top: 22px;
+  font-size: 26px;
   font-weight:bold;
   color: #45828e;
   /* color: white */
@@ -30,4 +30,83 @@ body {
   background-image: url('../images/close.png');
   background-repeat: no-repeat;
 }
+.updateServer {
+  width: 400px;
+  margin-left: 20px;
+  padding: 20px 20px;
+}
 
+.btnsty {
+  color: white;
+  background-color: #AED09E;
+  padding:6px 24px;
+  border:0px;
+  /* border-radius: 6px; */
+  font-size:17px;
+  font-family: SimHei,"黑体";
+  outline: none;
+  display:inline-block;
+  cursor:pointer;
+  font-weight:bold;
+  -webkit-app-region: no-drag;
+}
+
+.btnsty:active {
+  background-color:#f0f0f0;
+}
+
+.btnsty2 {
+  color: #AED09E;
+  background-color: white;
+  padding:4px 10px;
+  border:1px solid #AED09E;
+  border-radius: 2px;
+  font-size:17px;
+  font-family: SimHei,"黑体";
+  outline: none;
+  display:inline-block;
+  cursor:pointer;
+  /* font-weight:bold; */
+  -webkit-app-region: no-drag;
+}
+
+.btnsty2:active {
+  background-color:#f0f0f0;
+}
+
+
+.save {
+  position: absolute;
+  top: 280px;
+  left: 350px;
+}
+
+p {
+  font-size: 20px;
+  font-weight:bold;
+  color: #4c6f7b;
+}
+span {
+  color: #4c6f7b; 
+}
+.line {
+  margin-top: 10px;
+}
+
+.input {
+  font-size: 20px;
+  font-family: SimHei,"黑体";
+  padding: 3px;
+  border-radius: 3px;
+  border: 1px solid #DBDBDB;
+  margin-left: 10px;
+  outline-color: #AED09E;
+}
+.serverip {
+  width: 150px;
+  height: 22px;
+}
+.serverport {
+  width: 60px;
+  height: 22px;
+}
