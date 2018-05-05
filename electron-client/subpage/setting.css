@@ -1,0 +1,33 @@
+* {padding: 0; margin: 0;}
+
+body {
+  background-color: white;
+  -webkit-user-select: none;
+}
+
+.header {
+  margin-top: 0px;
+  height: 70px;
+  background-color: #AED09E;
+}
+
+.title {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  font-size: 28px;
+  font-weight:bold;
+  color: #45828e;
+  /* color: white */
+}
+
+.quit {
+  position: absolute;
+  right: 20px;
+  top: 25px;
+  width: 30px;
+  height: 30px;
+  background-image: url('../images/close.png');
+  background-repeat: no-repeat;
+}
+

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div id="mask" class=""></div>
+    <div class="head">
+      <header>ELECTRON</header>
+      <div class="line"></div>
+    </div>
+    <div class="content">
+      <img class="logo" src="electron-logo.png" alt="">
+      <span class="version">V1.0.1</span>
+    </div>
+    <div class="btnList">
+      <button id="setting" class="btnsty">Setting</button>
+      <button class="btnsty" onclick="relaunch()">Update</button>
+    </div>
+    <script>
+      // You can also require other files to run in this process
+      require('./renderer.js')
+
+      const {ipcRenderer} = require('electron')
+      function relaunch() {
+        ipcRenderer.send('relaunch', '_');
+      }
+
+    </script>
+  </body>
+</html>

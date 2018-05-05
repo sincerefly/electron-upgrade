@@ -1,0 +1,45 @@
+{
+  "name": "electron-client",
+  "version": "1.0.1",
+  "description": "A minimal Electron application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --ia32 --win"
+  },
+  "author": "Yieldone",
+  "license": "CC0-1.0",
+  "build": {
+    "productName": "electron-client",
+    "compression": "normal",
+    "electronVersion": "1.8.2",
+    "directories": {
+      "output": "./elect_builder_output"
+    },
+    "asarUnpack": [
+      "index.html",
+      "conf/config.js"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "ico.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
+    },
+    "extraFiles": [
+      "license.ini"
+    ]
+  },
+  "devDependencies": {
+    "electron": "~1.8.2",
+    "electron-prebuilt": "^1.4.13"
+  },
+  "dependencies": {
+    "electron-reload": "^1.2.2"
+  }
+}
