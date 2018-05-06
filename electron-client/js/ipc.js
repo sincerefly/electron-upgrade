@@ -31,3 +31,11 @@ ipcMain.on('save-address', (event, address) => {
     }
   });
 });
+
+/**
+ * download package
+ */
+ipcMain.on('download-package', (event, url) => {
+
+  // TODO: Download File
+});

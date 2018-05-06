@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <link rel="stylesheet" href="upgrade.css">
+  </head>
+  <body>
+    <div class="header">
+      <div class="title">UPDATE</div>
+      <div class="quit" onclick="window.close()"></div>
+    </div>
+    <div class="content">
+      <div class="panel">
+        <p id="cv" class="line">Current Version: <span id="currentVersion">1.0.1</span></p>
+        <p id="lv" class="line" style="display: none;">Latest Version: <span id="latestVersion"></span></p>
+        <p id="rn" class="line" style="display: none;">Release Notes: <span id="note"></span></p>
+        <p id="status" class="line" style="display: none;">Status: <span id="message"></span></p>
+      </div>
+      <button id="check" class="btnsty check">Check</button>
+      <button id="upgrade" class="btnsty upgrade">Update</button>
+    </div>
+  </body>
+  <script src="upgrade.js"></script>
+</html>
