@@ -1,6 +1,8 @@
 extern crate walkdir;
 extern crate crypto;
 extern crate zip;
+#[macro_use]
+extern crate serde_json;
 
 use std::io::{Read, Write, Seek};
 use std::collections::HashMap;
@@ -110,14 +112,14 @@ fn copy_source(sources: &Vec<(&str, String)>) {
     
     for p in sources {
         if p.0 == "dir" {
-            let need_create = p.1.replace(latest_wrap_dirname, "__updater");
+            let need_create = p.1.replace(latest_wrap_dirname, "__package");
             println!("=> create dir {}", &need_create);
             fs::create_dir_all(&need_create).expect("Nope");
         }
     }
     for p in sources {
         if p.0 == "file" {
-            let new_file = &p.1.replace(latest_wrap_dirname, "__updater");
+            let new_file = &p.1.replace(latest_wrap_dirname, "__package");
             let new_file = Path::new(&new_file);
             let new_file_path = new_file.parent().unwrap();
             println!("=> create dir: {:?}", new_file_path.display());
@@ -126,7 +128,7 @@ fn copy_source(sources: &Vec<(&str, String)>) {
     } 
     for p in sources {
         if p.0 == "file" {
-            let new_file = p.1.replace(latest_wrap_dirname, "__updater");
+            let new_file = p.1.replace(latest_wrap_dirname, "__package");
             println!("=> copy file: {} to {}", p.1, &new_file);
             fs::copy(&p.1, new_file).expect("Nope");
         }
@@ -137,8 +139,8 @@ fn pack_it() {
 
     println!("========== pack ==========");
 
-    let src_dir = "__updater";
-    let dst_file = "updater.zip";
+    let src_dir = "__package";
+    let dst_file = "package.zip";
 
     match doit(src_dir, dst_file, zip::CompressionMethod::Deflated) {
         Ok(_) => println!("=> done: {} written to {}", src_dir, dst_file),
@@ -195,7 +197,30 @@ fn doit(src_dir: &str, dst_file: &str, method: zip::CompressionMethod) -> zip::r
 }
 
 fn rm_tmp_dir() {
-    fs::remove_dir_all("__updater").expect("Nope");
+    fs::remove_dir_all("__package").expect("Nope");
+}
+
+fn create_info_file(current: &String, latest: &String) {
+
+    // package.zip md5
+    let mut buffer = Vec::new();
+    let mut hasher = Md5::new();
+    let mut f = File::open("package.zip").unwrap();
+    f.read_to_end(&mut buffer).unwrap();
+    hasher.input(&buffer);
+
+    // template json file
+    let mut buffer = File::create("info.json").expect("Nope");
+    let info = json!({
+        "md5": hasher.result_str(),
+        "from": "current version, like '1.0.1'",
+        "to": "latest version, like '1.0.2'",
+        "desc": "Fix Some Bug.",
+        "url": "http://127.0.0.1:8000/path/to/package.zip",
+        "ready": true
+    });
+    buffer.write(info.to_string().as_bytes()).expect("Nope");
+
 }
 
 fn main() {
@@ -212,10 +237,10 @@ fn main() {
 
     let e = time::SystemTime::now();
 
-    // let path = String::from("win-ia32-unpacked");
-    let current_info = path_info(&current_dir);
+    // let current_dir = String::from("win-ia32-unpacked");
+    // let latest_dir = String::from("win-ia32-unpacked_new");
 
-    // let path = String::from("win-ia32-unpacked_new");
+    let current_info = path_info(&current_dir);
     let latest_info = path_info(&latest_dir);
 
     let sources = get_diff(&current_info, &latest_info);
@@ -225,6 +250,8 @@ fn main() {
     pack_it();
 
     rm_tmp_dir();
+
+    create_info_file(&current_dir, &latest_dir);
 
     let ed = time::SystemTime::now();
     println!("time spend: {:?}", ed.duration_since(e).unwrap());

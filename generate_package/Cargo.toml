@@ -1,10 +1,11 @@
 [package]
-name = "upgrade_pack_generate"
+name = "generate_package"
 version = "0.1.0"
 authors = ["Yieldone <yieldone@pm.me>"]
 
 [dependencies]
 rust-crypto = "^0.2"
+serde_json = "1.0"
 walkdir = "2"
 zip = "0.3"
 
