@@ -2,6 +2,7 @@ const electron = require('electron')
 const app = electron.app
 const { ipcMain } = require('electron');
 const fs = require('fs');
+const download_package = require('./down').download_package;
 
 // Listening ipc message (main process)
 
@@ -36,6 +37,5 @@ ipcMain.on('save-address', (event, address) => {
  * download package
  */
 ipcMain.on('download-package', (event, url) => {
-
-  // TODO: Download File
+  download_package(event, url);
 });

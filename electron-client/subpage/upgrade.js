@@ -47,9 +47,30 @@ upgradeBtn.addEventListener('click', () => {
     document.getElementById("status").style.display="";
     document.getElementById("message").innerHTML = "";
     document.getElementById("message").innerHTML = "Already the latest version";
+  } else {
+    document.getElementById("cv").style.display="";
+    document.getElementById("lv").style.display="";
+    document.getElementById("rn").style.display="none";
+    document.getElementById("status").style.display="";
   }
 
   // download file
   ipcRenderer.send('download-package', info["url"]);
 
+});
+
+
+ipcRenderer.on('progress', (event, state) => {
+
+  let percent = state['percent'];
+
+  if (percent != 1) {
+    let percent = (state['percent'] * 100).toFixed(2).toString() + '%';
+    document.getElementById("message").innerHTML = percent;
+  } else if (percent == -1) {
+    document.getElementById("message").innerHTML = "网络错误";
+  } else {
+    document.getElementById("message").innerHTML = "100%";
+    // TODO: unzip
+  }
 });

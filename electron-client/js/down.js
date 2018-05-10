@@ -1,11 +1,13 @@
 var fs = require('fs');
 var request = require('request');
 var progress = require('request-progress');
+
+
  
-function download_package() {
+function download_package(event, url) {
 
     // The options argument is optional so you can omit it
-    progress(request('https://cmake.org/files/v3.11/cmake-3.11.0-win64-x64.msi'), {
+    progress(request(url), {
         // throttle: 2000,                    // Throttle the progress event to 2000ms, defaults to 1000ms
         // delay: 1000,                       // Only start to emit after 1000ms delay, defaults to 0ms
         // lengthHeader: 'x-transfer-length'  // Length header to use, defaults to content-length
@@ -25,15 +27,18 @@ function download_package() {
         //     }
         // }
         console.log('progress', state);
+        console.log(JSON.stringify(state));
+        event.sender.send('progress', state);
     })
     .on('error', function (err) {
         // Do something with err
+        event.sender.send('progress', {"percent": -1}); 
     })
     .on('end', function () {
         // Do something after request finishes
+        event.sender.send('progress', {"percent": 1});  
     })
-    .pipe(fs.createWriteStream('cmake-3.11.0-win64-x64.msi'));
-
+    .pipe(fs.createWriteStream('package.zip'));
 }
 
 
