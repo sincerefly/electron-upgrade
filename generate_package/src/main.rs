@@ -9,7 +9,9 @@ use std::collections::HashMap;
 use std::path::Path;
 use std::fs::File;
 use std::fs;
+use std::io;
 use std::time;
+use std::os::windows::prelude::*;
 
 use crypto::digest::Digest;
 use crypto::md5::Md5;
@@ -209,10 +211,15 @@ fn create_info_file(current: &String, latest: &String) {
     f.read_to_end(&mut buffer).unwrap();
     hasher.input(&buffer);
 
+    let metadata = fs::metadata("package.zip").expect("Nope");
+    let file_size = metadata.file_size();
+    println!("file_size: {}", file_size);
+
     // template json file
     let mut buffer = File::create("info.json").expect("Nope");
     let info = json!({
         "md5": hasher.result_str(),
+        "package_size": file_size,
         "from": "current version, like '1.0.1'",
         "to": "latest version, like '1.0.2'",
         "desc": "Fix Some Bug.",
