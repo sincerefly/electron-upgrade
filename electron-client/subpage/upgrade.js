@@ -10,6 +10,7 @@ checkBtn.addEventListener('click', () => {
     "md5": "e10adc3949ba59abbe56e057f20f883e",
     "from": "1.0.1",
     "to": "1.0.2",
+    "package_size": "7000000",
     "desc": "Fix Some Bug.",
     "url": "http://127.0.0.1:8000/download/V1.0.2/package.zip",
     "ready": true
@@ -56,7 +57,7 @@ upgradeBtn.addEventListener('click', () => {
 
   // download file
   ipcRenderer.send('download-package', info["url"]);
-
+  document.getElementById("message").innerHTML = "prepare...";
 });
 
 
@@ -68,9 +69,13 @@ ipcRenderer.on('progress', (event, state) => {
     let percent = (state['percent'] * 100).toFixed(2).toString() + '%';
     document.getElementById("message").innerHTML = percent;
   } else if (percent == -1) {
-    document.getElementById("message").innerHTML = "网络错误";
+    document.getElementById("message").innerHTML = "download error";
   } else {
     document.getElementById("message").innerHTML = "100%";
-    // TODO: unzip
+
+    // unpack zip and upsert source
+    ipcRenderer.send('unpack-and-upsert', '_');
   }
 });
+
+ipcRenderer.send('unpack-and-upsert', '_');

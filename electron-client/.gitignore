@@ -1,3 +1,4 @@
 node_modules
 elect_builder_output
 *.log
+*.lock

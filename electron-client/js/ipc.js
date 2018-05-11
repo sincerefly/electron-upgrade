@@ -3,6 +3,7 @@ const app = electron.app
 const { ipcMain } = require('electron');
 const fs = require('fs');
 const download_package = require('./down').download_package;
+const unzip = require('unzip');
 
 // Listening ipc message (main process)
 
@@ -38,4 +39,17 @@ ipcMain.on('save-address', (event, address) => {
  */
 ipcMain.on('download-package', (event, url) => {
   download_package(event, url);
+});
+
+
+/**
+ * unpack zip and upsert source
+ */
+ipcMain.on('unpack-and-upsert', (event, _) => {
+  
+  // unpack
+  fs.createReadStream('package.zip').pipe(unzip.Extract({ path: 'update_dist' }));
+
+  // add or update
+  // TODO
 });
